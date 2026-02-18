@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { MarketWidget } from "@/components/market-widget"
 import { MapView } from "@/components/map-view"
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
         </header>
 
         <MapView />
+
+        <MarketWidget />
 
         <div className="rounded-lg border bg-card p-6 text-card-foreground">
           <div className="flex flex-wrap items-center justify-between gap-3">

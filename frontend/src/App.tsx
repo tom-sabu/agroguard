@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { MarketWidget } from "@/components/market-widget"
+import { MapView } from "@/components/map-view"
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,6 +16,8 @@ function App() {
             Kottayam hyper-local marketplace (setup complete).
           </p>
         </header>
+
+        <MapView />
 
         <MarketWidget />
 

@@ -11,6 +11,15 @@ Hyper-local marketplace MVP for Kottayam.
 
 Create a `.env` at the repo root from `.env.example`.
 
+You will need:
+
+- **Node.js**: v18 or newer (for the Vite + React frontend).
+- **Python**: 3.9 or newer (for the FastAPI backend).
+- **PostgreSQL (Neon recommended)**:
+  - A database URL with PostGIS enabled, set as `DATABASE_URL` in `.env`.
+- **Cloudinary account**:
+  - Fill `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` in `.env`.
+
 ## Run locally
 
 ### Frontend

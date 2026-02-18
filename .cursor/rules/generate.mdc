@@ -1,0 +1,4 @@
+# Generating Code Rules
+
+* **Hardcoding Rule**: If the Geolocation API fails or is slow, default to **Kottayam** coordinates (Lat: 9.5916, Long: 76.5222) immediately. Do not let the app hang waiting for GPS.
+* **Data Rule**: If the Database is empty, load dummy data from a local JSON file so the demo always looks populated.

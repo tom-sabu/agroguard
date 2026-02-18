@@ -1,0 +1,7 @@
+# Workflow Rules
+
+- **Feature Tracking**: Before starting any task, check `.cursor/active_features.md`.
+- **Completion**: Once a feature is complete and verified, mark it as done in `.cursor/active_features.md`.
+- **Documentation**: Keep `PRD.md` and `Docs/` updated if architectural changes are made.
+- **Commits**: Use descriptive commit messages if using Git.
+- **Environment**: Always check for required environment variables in `.env.example` when adding new services.

@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { MapView } from "@/components/map-view"
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,6 +15,8 @@ function App() {
             Kottayam hyper-local marketplace (setup complete).
           </p>
         </header>
+
+        <MapView />
 
         <div className="rounded-lg border bg-card p-6 text-card-foreground">
           <div className="flex flex-wrap items-center justify-between gap-3">

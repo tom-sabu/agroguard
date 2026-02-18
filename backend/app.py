@@ -189,3 +189,12 @@ def create_product(
     finally:
         session.close()
 
+
+@app.get("/products", response_model=list[ProductResponse])
+def get_products():
+    session = db_session()
+    try:
+        products = session.query(Product).order_by(Product.created_at.desc()).all()
+        return products
+    finally:
+        session.close()

@@ -1,0 +1,32 @@
+export const DUMMY_PRODUCTS = [
+    {
+        id: 1,
+        title: "Fresh Rubber Sheets",
+        category: "Rubber",
+        price_inr: 180.50,
+        image_url: "https://images.unsplash.com/photo-1598466657904-8098c1995738?q=80&w=2070&auto=format&fit=crop",
+        lat: 9.5916,
+        lon: 76.5222,
+        created_at: new Date().toISOString(),
+    },
+    {
+        id: 2,
+        title: "Organic Coconut",
+        category: "Coconut",
+        price_inr: 25.00,
+        image_url: "https://images.unsplash.com/photo-1596700816859-e3372c0570b2?q=80&w=2070&auto=format&fit=crop",
+        lat: 9.5940,
+        lon: 76.5250,
+        created_at: new Date().toISOString(),
+    },
+    {
+        id: 3,
+        title: "Black Pepper (Dried)",
+        category: "Spices",
+        price_inr: 500.00,
+        image_url: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=2070&auto=format&fit=crop",
+        lat: 9.5880,
+        lon: 76.5200,
+        created_at: new Date().toISOString(),
+    },
+];

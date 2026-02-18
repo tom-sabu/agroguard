@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { MarketWidget } from "@/components/market-widget"
 import { MapView } from "@/components/map-view"
+import { PostProduct } from "@/components/post-product"
 
 function App() {
   const [count, setCount] = useState(0)
@@ -20,6 +21,8 @@ function App() {
         <MapView />
 
         <MarketWidget />
+
+        <PostProduct />
 
         <div className="rounded-lg border bg-card p-6 text-card-foreground">
           <div className="flex flex-wrap items-center justify-between gap-3">

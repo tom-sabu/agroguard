@@ -13,6 +13,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import DateTime, Float, Integer, String, Text, create_engine, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
+import cloudinary
+import cloudinary.uploader
+from fastapi import UploadFile, File, Form
+
 
 
 ROOT_ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
@@ -34,6 +38,9 @@ class Settings(BaseSettings):
         alias="FRONTEND_ORIGIN",
         description="Frontend dev origin for CORS.",
     )
+    cloudinary_cloud_name: str = Field(alias="CLOUDINARY_CLOUD_NAME", default="")
+    cloudinary_api_key: str = Field(alias="CLOUDINARY_API_KEY", default="")
+    cloudinary_api_secret: str = Field(alias="CLOUDINARY_API_SECRET", default="")
 
 
 @lru_cache
@@ -87,6 +94,15 @@ def startup_create_tables() -> None:
     if engine is None:
         return
     Base.metadata.create_all(bind=engine)
+    
+    # Configure Cloudinary
+    if settings.cloudinary_cloud_name:
+        cloudinary.config(
+            cloud_name=settings.cloudinary_cloud_name,
+            api_key=settings.cloudinary_api_key,
+            api_secret=settings.cloudinary_api_secret,
+        )
+
 
 
 def db_session() -> Session:
@@ -100,6 +116,21 @@ class HealthResponse(BaseModel):
     ok: bool
     service: str = "backend"
     time_utc: datetime
+
+
+class ProductResponse(BaseModel):
+    id: int
+    title: str
+    category: Optional[str]
+    price_inr: Optional[float]
+    image_url: Optional[str]
+    lat: float
+    lon: float
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
 
 
 @app.get("/health", response_model=HealthResponse)
@@ -118,4 +149,43 @@ def health_db():
         return {"ok": True}
     except Exception as e:  # pragma: no cover
         raise HTTPException(status_code=503, detail=f"DB unavailable: {e}")
+
+
+@app.post("/products", response_model=ProductResponse)
+def create_product(
+    title: str = Form(...),
+    category: Optional[str] = Form(None),
+    price_inr: Optional[float] = Form(None),
+    lat: float = Form(...),
+    lon: float = Form(...),
+    file: UploadFile = File(...),
+):
+    # Upload to Cloudinary
+    try:
+        # file.file is a SpooledTemporaryFile
+        upload_result = cloudinary.uploader.upload(file.file, folder="agroguard/products")
+        image_url = upload_result.get("secure_url")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
+
+    # Save to DB
+    session = db_session()
+    try:
+        new_product = Product(
+            title=title,
+            category=category,
+            price_inr=price_inr,
+            lat=lat,
+            lon=lon,
+            image_url=image_url
+        )
+        session.add(new_product)
+        session.commit()
+        session.refresh(new_product)
+        return new_product
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        session.close()
 

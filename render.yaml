@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: agroguard-backend
+    env: python
+    region: singapore # Closest to Kerala for lower latency
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd backend
+      uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false # Must be set manually in Render Dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: FRONTEND_ORIGIN
+        value: https://agroguard.vercel.app # We will update this later
+
+  # Optional: Static site hosting for frontend if not using Vercel
+  # - type: static
+  #   name: agroguard-frontend
+  #   env: static
+  #   root: frontend
+  #   buildCommand: npm install && npm run build
+  #   staticPublishPath: dist

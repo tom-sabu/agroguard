@@ -138,16 +138,23 @@ def health() -> HealthResponse:
     return HealthResponse(ok=True, time_utc=datetime.now(timezone.utc))
 
 
+
 @app.get("/health/db")
 def health_db():
+    print("Health DB: Starting check...")
     engine = get_engine()
     if engine is None:
+        print("Health DB: Engine is None (DATABASE_URL missing)")
         raise HTTPException(status_code=503, detail="DATABASE_URL is not set")
     try:
+        print(f"Health DB: Connecting to {engine.url}...")
         with engine.connect() as conn:
+            print("Health DB: Connected! Executing query...")
             conn.execute(text("select 1"))
+            print("Health DB: Query Successful!")
         return {"ok": True}
-    except Exception as e:  # pragma: no cover
+    except Exception as e:
+        print(f"Health DB: Error - {e}")
         raise HTTPException(status_code=503, detail=f"DB unavailable: {e}")
 
 

@@ -1,9 +1,16 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-border: hsl(var(--border));
+  --color-root-background: hsl(var(--background));
+}
+
 :root {
   /* Nature-Inspired Scheme: Primary (Emerald), Accent (Amber), Surface (Clean) */
-  --background: 210 20% 98%; /* Slightly cooler grey-white */
+  --background: 210 20% 98%;
+  /* Slightly cooler grey-white */
   --foreground: 222.2 84% 4.9%;
 
   --card: 0 0% 100%;
@@ -13,11 +20,11 @@
   --popover-foreground: 222.2 84% 4.9%;
 
   /* Emerald 600 - Grounded Green */
-  --primary: 158 64% 52%;  
+  --primary: 158 64% 52%;
   --primary-foreground: 210 40% 98%;
 
   /* Amber 500 - Ripe fruit accent */
-  --secondary: 45 93% 47%; 
+  --secondary: 45 93% 47%;
   --secondary-foreground: 222.2 47.4% 11.2%;
 
   --muted: 210 40% 96.1%;
@@ -33,7 +40,8 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 158 64% 52%;
 
-  --radius: 0.75rem; /* Rounded-xl for friendly look */
+  --radius: 0.75rem;
+  /* Rounded-xl for friendly look */
 }
 
 .dark {
@@ -70,6 +78,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: ui-sans-serif, system-ui, sans-serif;

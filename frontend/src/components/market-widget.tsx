@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 import { ShoppingBasket } from "lucide-react"
 
 import type { Product } from "@/lib/types"
+import { API_BASE_URL } from "@/config"
 
 export function MarketWidget() {
   const [products, setProducts] = useState<Product[]>([])
 
   useEffect(() => {
-    fetch("http://localhost:8000/products")
+    fetch(`${API_BASE_URL}/products`)
       .then((res) => {
         if (!res.ok) return []
         return res.json()

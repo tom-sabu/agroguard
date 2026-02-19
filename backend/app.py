@@ -71,6 +71,8 @@ class Product(Base):
     image_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     lat: Mapped[float] = mapped_column(Float, nullable=False)
     lon: Mapped[float] = mapped_column(Float, nullable=False)
+    quantity_available: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    quantity_unit: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
@@ -82,7 +84,7 @@ app = FastAPI(title="AgriLocal API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_origin],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -126,6 +128,8 @@ class ProductResponse(BaseModel):
     image_url: Optional[str]
     lat: float
     lon: float
+    quantity_available: Optional[float] = None
+    quantity_unit: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -166,6 +170,8 @@ def create_product(
     lat: float = Form(...),
     lon: float = Form(...),
     file: UploadFile = File(...),
+    quantity_available: Optional[float] = Form(None),
+    quantity_unit: Optional[str] = Form(None),
 ):
     # Upload to Cloudinary
     try:
@@ -184,7 +190,9 @@ def create_product(
             price_inr=price_inr,
             lat=lat,
             lon=lon,
-            image_url=image_url
+            image_url=image_url,
+            quantity_available=quantity_available,
+            quantity_unit=quantity_unit
         )
         session.add(new_product)
         session.commit()

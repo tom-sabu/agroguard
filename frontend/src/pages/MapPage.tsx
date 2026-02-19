@@ -2,6 +2,7 @@ import { MapView } from "@/components/map-view"
 import { useEffect, useState } from "react"
 import { DUMMY_PRODUCTS } from "@/lib/dummy-data"
 import type { Product } from "@/lib/types"
+import { API_BASE_URL } from "@/config"
 
 export function MapPage() {
     const [products, setProducts] = useState<Product[]>([])
@@ -9,7 +10,7 @@ export function MapPage() {
     useEffect(() => {
         async function fetchProducts() {
             try {
-                const res = await fetch("http://localhost:8000/products")
+                const res = await fetch(`${API_BASE_URL}/products`)
                 if (!res.ok) throw new Error("Failed to fetch")
                 const data = await res.json()
                 if (Array.isArray(data) && data.length > 0) return setProducts(data)

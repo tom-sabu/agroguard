@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css"
 import { Button } from "@/components/ui/button"
 import { DUMMY_PRODUCTS } from "@/lib/dummy-data"
 import type { Product } from "@/lib/types"
+import { API_BASE_URL } from "@/config"
 
 import { useCart } from "@/context/CartContext"
 
@@ -43,7 +44,7 @@ export function ProductDetails() {
         if (!id) return
 
         // Fetch from API first
-        fetch(`http://localhost:8000/products/${id}`)
+        fetch(`${API_BASE_URL}/products/${id}`)
             .then(res => {
                 if (!res.ok) throw new Error("Not found")
                 return res.json()

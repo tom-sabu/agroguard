@@ -6,5 +6,7 @@ export interface Product {
     image_url?: string;
     lat: number;
     lon: number;
+    quantity_available?: number;
+    quantity_unit?: string;
     created_at: string;
 }

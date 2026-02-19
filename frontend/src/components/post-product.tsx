@@ -5,6 +5,7 @@ import { Loader2, Upload, MapPin, CheckCircle2, AlertCircle, Leaf } from "lucide
 
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { API_BASE_URL } from "@/config"
 
 export function PostProduct() {
   const [loading, setLoading] = useState(false)
@@ -14,6 +15,8 @@ export function PostProduct() {
   const [title, setTitle] = useState("")
   const [category, setCategory] = useState("Vegetable")
   const [price, setPrice] = useState("")
+  const [quantity, setQuantity] = useState("")
+  const [unit, setUnit] = useState("kg")
   const [lat, setLat] = useState("9.5916")
   const [lon, setLon] = useState("76.5222")
   const [file, setFile] = useState<File | null>(null)
@@ -42,12 +45,14 @@ export function PostProduct() {
     formData.append("title", title)
     formData.append("category", category)
     formData.append("price_inr", price)
+    formData.append("quantity_available", quantity)
+    formData.append("quantity_unit", unit)
     formData.append("lat", lat)
     formData.append("lon", lon)
     formData.append("file", file)
 
     try {
-      await axios.post("http://localhost:8000/products", formData, {
+      await axios.post(`${API_BASE_URL}/products`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -55,6 +60,8 @@ export function PostProduct() {
       setSuccess(true)
       setTitle("")
       setPrice("")
+      setQuantity("")
+      setUnit("kg")
       setFile(null)
       if (fileInputRef.current) fileInputRef.current.value = ""
     } catch (err: any) {
@@ -138,6 +145,33 @@ export function PostProduct() {
                   onChange={(e) => setPrice(e.target.value)}
                   required
                 />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none">
+                Quantity
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  placeholder="Qty"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  required
+                />
+                <select
+                  className="flex h-10 w-[80px] rounded-md border border-input bg-background px-2 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                >
+                  <option value="kg">kg</option>
+                  <option value="g">g</option>
+                  <option value="pcs">pcs</option>
+                  <option value="bunch">bunch</option>
+                  <option value="liter">liter</option>
+                </select>
               </div>
             </div>
           </div>

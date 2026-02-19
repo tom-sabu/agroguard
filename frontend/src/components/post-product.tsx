@@ -1,7 +1,7 @@
 
 import { useState, useRef } from "react"
 import axios from "axios"
-import { Loader2, Upload, MapPin, CheckCircle2, AlertCircle } from "lucide-react"
+import { Loader2, Upload, MapPin, CheckCircle2, AlertCircle, Leaf } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -83,23 +83,24 @@ export function PostProduct() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto shadow-lg border-primary/10">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold text-primary flex items-center gap-2">
-          Sell Your Produce
+    <Card className="w-full rounded-xl border-dashed border-2 shadow-sm hover:border-primary/50 transition-colors">
+      <CardHeader className="bg-muted/40 pb-4">
+        <CardTitle className="text-lg font-bold text-foreground flex items-center gap-2">
+          <Leaf className="h-5 w-5 text-primary" />
+          List Your Harvest
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <CardContent className="pt-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
           <div className="space-y-2">
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label className="text-sm font-medium leading-none">
               Product Title
             </label>
             <input
               type="text"
               placeholder="e.g. Fresh Tomatoes"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -127,50 +128,55 @@ export function PostProduct() {
               <label className="text-sm font-medium leading-none">
                 Price (₹)
               </label>
-              <input
-                type="number"
-                placeholder="0.00"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
+              <div className="relative">
+                <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">₹</span>
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  className="flex h-10 w-full rounded-md border border-input bg-background pl-7 pr-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                />
+              </div>
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium leading-none">Location</label>
+            <label className="text-sm font-medium leading-none">Pickup Location</label>
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <input
                   type="text"
                   value={`${lat}, ${lon}`}
                   readOnly
-                  className="flex h-10 w-full rounded-md border border-input bg-muted pl-9 px-3 py-2 text-sm text-muted-foreground focus-visible:outline-none cursor-default"
+                  className="flex h-10 w-full rounded-md border border-input bg-muted pl-9 px-3 py-2 text-xs text-muted-foreground focus-visible:outline-none cursor-default font-mono"
                 />
               </div>
-              <Button type="button" variant="outline" size="icon" onClick={handleGetLocation} title="Use Current Location">
+              <Button type="button" variant="outline" size="icon" onClick={handleGetLocation} className="shrink-0" title="Use Current Location">
                 <MapPin className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium leading-none">Upload Image</label>
+            <label className="text-sm font-medium leading-none">Product Image</label>
             <div
-              className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-dashed rounded-md appearance-none cursor-pointer hover:border-primary focus:outline-none"
+              className={`flex flex-col items-center justify-center w-full h-32 px-4 transition border-2 border-dashed rounded-xl cursor-pointer hover:bg-muted/50 ${file ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 bg-muted/5'}`}
               onClick={() => fileInputRef.current?.click()}
             >
-              <span className="flex flex-col items-center space-y-2">
-                {file ? (
-                  <span className="font-medium text-primary truncate max-w-[200px]">{file.name}</span>
-                ) : (
-                  <>
-                    <Upload className="w-6 h-6 text-muted-foreground" />
-                    <span className="font-medium text-muted-foreground text-sm">Click update image</span>
-                  </>
-                )}
-              </span>
+              {file ? (
+                <div className="flex flex-col items-center gap-2 text-primary">
+                  <CheckCircle2 className="w-8 h-8" />
+                  <span className="font-medium text-sm truncate max-w-[200px]">{file.name}</span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Upload className="w-8 h-8 opacity-50" />
+                  <span className="font-medium text-sm">Click to upload photo</span>
+                </div>
+              )}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -182,27 +188,27 @@ export function PostProduct() {
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 rounded-md">
+            <div className="flex items-center gap-2 p-3 text-sm text-destructive bg-destructive/10 rounded-md">
               <AlertCircle className="h-4 w-4" />
               <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="flex items-center gap-2 p-3 text-sm text-green-600 bg-green-50 rounded-md">
+            <div className="flex items-center gap-2 p-3 text-sm text-primary bg-primary/10 rounded-md">
               <CheckCircle2 className="h-4 w-4" />
-              <span>Product listed successfully!</span>
+              <span>Listing created successfully!</span>
             </div>
           )}
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full font-bold" disabled={loading} size="lg">
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Wait
+                Listing...
               </>
             ) : (
-              "List Product"
+              "Post listing"
             )}
           </Button>
 

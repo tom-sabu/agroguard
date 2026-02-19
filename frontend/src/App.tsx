@@ -1,69 +1,40 @@
-import { useState, useEffect } from "react"
-
-import { Button } from "@/components/ui/button"
-import { MarketWidget } from "@/components/market-widget"
-import { MapView } from "@/components/map-view"
-import { PostProduct } from "@/components/post-product"
-
-import { DUMMY_PRODUCTS } from "@/lib/dummy-data"
-import type { Product } from "@/lib/types"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { Navbar } from "@/components/layout/navbar"
+import { Home } from "@/pages/Home"
+import { Sell } from "@/pages/Sell"
+import { MapPage } from "@/pages/MapPage"
+import { ProductDetails } from "@/pages/ProductDetails"
+import { CartProvider } from "@/context/CartContext"
+import { AuthProvider } from "@/context/AuthContext"
+import { Cart } from "@/pages/Cart"
+import { Login } from "@/pages/Login"
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [products, setProducts] = useState<Product[]>([])
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const res = await fetch("http://localhost:8000/products")
-        if (!res.ok) throw new Error("Failed to fetch")
-        const data = await res.json()
-        if (Array.isArray(data) && data.length > 0) {
-          setProducts(data)
-        } else {
-          // Fallback if empty array
-          setProducts(DUMMY_PRODUCTS)
-        }
-      } catch (error) {
-        console.error("Error fetching products, using dummy data:", error)
-        setProducts(DUMMY_PRODUCTS)
-      }
-    }
-
-    fetchProducts()
-  }, [])
-
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-10">
-        <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">AgriLocal</h1>
-          <p className="text-sm text-muted-foreground">
-            Kottayam hyper-local marketplace (setup complete).
-          </p>
-        </header>
+    <Router>
+      <AuthProvider>
+        <CartProvider>
+          <div className="min-h-dvh bg-background text-foreground font-sans selection:bg-primary/20 flex flex-col">
+            <Navbar />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/sell" element={<Sell />} />
+                <Route path="/map" element={<MapPage />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/login" element={<Login />} />
+              </Routes>
+            </main>
 
-        <MapView products={products} />
-
-        <MarketWidget />
-
-        <PostProduct />
-
-        <div className="rounded-lg border bg-card p-6 text-card-foreground">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="text-sm font-medium">UI sanity check</div>
-              <div className="text-sm text-muted-foreground">
-                Tailwind + shadcn/ui utilities are wired up.
-              </div>
-            </div>
-            <Button onClick={() => setCount((c) => c + 1)}>
-              Clicked {count} times
-            </Button>
+            {/* Simple Footer */}
+            <footer className="border-t py-6 text-center text-sm text-muted-foreground bg-muted/20">
+              <p>&copy; 2026 AgriLocal (Agroguard). Fresh from Kottayam.</p>
+            </footer>
           </div>
-        </div>
-      </div>
-    </div>
+        </CartProvider>
+      </AuthProvider>
+    </Router>
   )
 }
 
